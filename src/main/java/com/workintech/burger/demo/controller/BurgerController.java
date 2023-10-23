@@ -53,8 +53,9 @@ public class BurgerController {
     }
 
     @GetMapping("/findByBreadType/{breadType}")
-    public Set<Burger> findByBreadType(@PathVariable BreadType breadType) {
-        return burgerDao.findByBreadType(breadType);
+    public Set<Burger> findByBreadType(@PathVariable String breadType) {
+        BreadType breadTypeEnum = BreadType.valueOf(breadType);
+        return burgerDao.findByBreadType(breadTypeEnum);
     }
 
     @GetMapping("/findByContent/{contents}")

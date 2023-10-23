@@ -44,7 +44,7 @@ public class BurgerDaoImpl implements BurgerDao {
     @Override
     public Set<Burger> findByPrice(double price) {
         //Aldığı price değerinden daha büyük olan Burgerleri pricelarına göre büyükten küçüğe dogru listeler.
-        TypedQuery<Burger> query = entityManager.createQuery("SELECT e FROM Burger e WHERE e.price > :price ORDER BY e.price DESC", Burger.class);
+        TypedQuery<Burger> query = entityManager.createQuery("SELECT b FROM Burger b WHERE b.price > :price ORDER BY b.price DESC", Burger.class);
         query.setParameter("price", price);
         return query.getResultList().stream().collect(Collectors.toSet());
     }
@@ -52,7 +52,7 @@ public class BurgerDaoImpl implements BurgerDao {
     @Override
     public Set<Burger> findByBreadType(BreadType breadType) {
         //Bu parametreye eşit olan breadType tipindeki Burgerleri isimlerine göre alfabetik sırada küçükten büyüğe doğru sıralar
-        TypedQuery<Burger> query = entityManager.createQuery("SELECT e FROM Burger e WHERE e.breadType= :breadType ORDER BY e.name", Burger.class);
+        TypedQuery<Burger> query = entityManager.createQuery("SELECT b FROM Burger b WHERE b.breadType= :breadType ORDER BY b.name", Burger.class);
         query.setParameter("breadType", breadType);
         return query.getResultList().stream().collect(Collectors.toSet());
     }
@@ -60,8 +60,9 @@ public class BurgerDaoImpl implements BurgerDao {
     @Override
     public Set<Burger> findByContent(String searchingContent) {
         // Bir adet String değeri alır ve bu değeri contents tablosunda içeren tüm burgerleri döner.
-        TypedQuery<Burger> query = entityManager.createQuery("SELECT e FROM Burger e WHERE e.contents = :searchingContent", Burger.class);
-        query.setParameter("contents", searchingContent);
+        TypedQuery<Burger> query = entityManager.createQuery("SELECT b FROM Burger b WHERE " +
+                "b.contents like CONCAT('%', :searchingContent ,'%') ORDER BY b.name", Burger.class);
+        query.setParameter("searchingContent", searchingContent);
         return query.getResultList().stream().collect(Collectors.toSet());
     }
 
